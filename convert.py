@@ -71,7 +71,9 @@ def parse(filename, outfile, nodata=''):
     wb.save(outfile)
 
     end = time.clock()
-    print "Processed {0} entries in {1:.2f}s".format(row_pointer, end - start)
+    msg = "Processed {0} entries in {1:.2f}s".format(row_pointer, end - start)
+    print msg
+    return msg
 
 def check_filesize(filename):
     size = os.stat(filename).st_size
