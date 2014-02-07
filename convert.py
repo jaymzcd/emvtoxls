@@ -78,7 +78,7 @@ def parse(filename, outfile, nodata=''):
 def check_filesize(filename):
     size = os.stat(filename).st_size
     filesize_meg = float(size) / 1024**2
-    if filesize_meg > 5:
+    if filesize_meg > 30:
         print "Not yet suitable for large XML files"
         sys.exit(3)
 
