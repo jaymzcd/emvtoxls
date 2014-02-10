@@ -8,9 +8,9 @@ through without being converted to an entity.
 A command line interface and TK GUI are provided. By using PyInstaller a standalone
 exe can be generated - current build provided in dist.
 
-[screenshot-gui](http://i.imgur.com/MGt4wvZ.png)
+![screenshot-gui](http://i.imgur.com/MGt4wvZ.png)
 
-[screenshot-cli](http://i.imgur.com/LNKwl5z.png)
+![screenshot-cli](http://i.imgur.com/LNKwl5z.png)
 
 For no other reason that to make @ninjaneenaa's life a bit easier.
 
