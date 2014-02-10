@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-
+import os
 import Tkinter as tk
 from tkFileDialog import askopenfilename
 from convert import parse
 
+
 class Data(object):
     filename = None
+
 
 class App(tk.Frame):
 
@@ -28,13 +30,16 @@ class App(tk.Frame):
 
     def process_file(self):
         name = self.outputname_svar.get()
+        # lets be nice and prepend extensions if none given
         outfile = name if '.xls' in name else '{}.xls'.format(name)
+        # Now point it to desktop - windows or linux huzzah
+        outfile = os.path.expanduser('~/Desktop/{}'.format(outfile))
         process_output = parse(self.data.filename, outfile, nodata=self.nodata)
         self.filename_svar.set(process_output)
 
     def openfile(self):
        filename = askopenfilename(parent=self.parent, defaultextension="*.xml", filetypes=[('XML', '.xml'), ('Text', '*.txt'), ('All', '*')])
-       self.filename_svar.set('File: {}'.format(filename))
+       self.filename_svar.set('File: {}'.format(os.path.basename(filename)))
        self.data.filename = filename
 
     def create_menu(self):
@@ -92,7 +97,10 @@ class App(tk.Frame):
             self.nodata_val.insert(tk.END, item)
 
         process_btn = tk.Button(self.parent, text="Process", command=self.process_file)
-        self.add(process_btn, row=3, columnspan=2, sticky=tk.W + tk.E)
+        self.add(process_btn, row=3, sticky=tk.W + tk.E)
+
+        quit_btn = tk.Button(self.parent, text="Exit", command=self.parent.quit)
+        self.add(quit_btn, row=3, column=1, sticky=tk.W + tk.E)
 
         self.parent.config(menu=menu)
 

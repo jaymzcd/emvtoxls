@@ -17,6 +17,21 @@ from lxml import etree
 #  """"YUMMMMMM  M'  "MMM  MP     MMMUP*"^^,m"       "Mm,""""YUMMM "YMmMY"
 #
 
+
+class EMVXMLFile(object):
+    """
+        We can't rely on them to supply good well formed XML, so lets replace anything
+        bad as we see it on demand for iterparse to avoid it throwing exceptions
+    """
+    def __init__(self, filename):
+        self.f = open(filename)
+
+    def read(self, size=None):
+        # For one they seem to pass through ampresands no problem despite
+        # being invalid unless encoded as entities.
+        return self.f.read(size).replace('&', '&amp;')
+
+
 def create_xls(name='Sheet 1'):
     """
         Generate the XLS instance to write to
@@ -42,7 +57,7 @@ def parse(filename, outfile, nodata='', maxcount=None):
     """
     start = time.clock()
 
-    context = etree.iterparse(filename, events=("start",))
+    context = etree.iterparse(EMVXMLFile(filename), events=("start",))
     event, root_element = context.next()
 
     header_style = get_header_style()
