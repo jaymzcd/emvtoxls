@@ -1,9 +1,17 @@
 from lxml import etree
 
-context = etree.iterparse("big.xml", events=("start", "end"))
+context = etree.iterparse("data/big.xml", events=("start", "end"))
 event, root_element = context.next()
 
-for action, element in context:
-    if action == 'end' and element.tag == 'EMAIL':
-        print element.text
-    root_element.clear()
+cnt = 0
+
+while True:
+    e, m = context.next()
+
+    for element in m.getchildren():
+        #print element.tag, element.text
+        root_element.clear()
+
+    cnt += 1
+    print cnt
+
