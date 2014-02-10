@@ -58,8 +58,6 @@ def parse(filename, outfile, nodata='', maxcount=None):
     start = time.clock()
 
     context = etree.iterparse(EMVXMLFile(filename), events=("start",))
-    event, root_element = context.next()
-
     header_style = get_header_style()
     wb, ws = create_xls()
 
@@ -110,7 +108,7 @@ def parse(filename, outfile, nodata='', maxcount=None):
 
         # Now remove the current root element from memory - this is how to
         # avoid a huge memory error when dealing with 100Mb XML files :)
-        root_element.clear()
+        current_member.clear()
 
         if maxcount is not None and row_pointer > maxcount:
             # Note we write out the count - 1 as we don't include the header
@@ -122,7 +120,7 @@ def parse(filename, outfile, nodata='', maxcount=None):
     wb.save(outfile)
 
     end = time.clock()
-    msg = "Processed {0} entries in {1:.2f}s".format(row_pointer, end - start)
+    msg = "Processed {0} entries in {1:.2f}s".format(row_pointer - 1, end - start)
     print msg
     return msg
 
