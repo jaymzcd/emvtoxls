@@ -50,7 +50,7 @@ def get_header_style():
     style.font = font
     return style
 
-def parse(filename, outfile, nodata='', maxcount=None):
+def parse(filename, outfile, nodata='', maxcount=None, callback=None):
     """
         Read the given XML file and use the options given to create an XLS
         file as we go
@@ -104,7 +104,11 @@ def parse(filename, outfile, nodata='', maxcount=None):
                 row_pointer += 1
 
             if row_pointer % 100 == 0:
-                print "On row {}".format(row_pointer)
+                # print "On row {}".format(row_pointer)
+
+                if callback:
+                    # report progress
+                    callback(row_pointer)
 
         # Now remove the current root element from memory - this is how to
         # avoid a huge memory error when dealing with 100Mb XML files :)
@@ -113,15 +117,17 @@ def parse(filename, outfile, nodata='', maxcount=None):
         if maxcount is not None and row_pointer > maxcount:
             # Note we write out the count - 1 as we don't include the header
             # in this count! So 101 rows is 100 rows of actual data
-            print "Exiting after {} entries".format(row_pointer - 1)
+            #print "Exiting after {} entries".format(row_pointer - 1)
             break
+
+    if callback:
+        callback("Writing XLS file, please wait...")
 
     # Finally save and close the XLS sheet that's been made
     wb.save(outfile)
 
     end = time.clock()
     msg = "Processed {0} entries in {1:.2f}s".format(row_pointer - 1, end - start)
-    print msg
     return msg
 
 def check_filesize(filename):
